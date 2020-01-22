@@ -5,3 +5,13 @@ export function getHomeMultiData() {
     url:'/home/multidata'
   })
 }
+//商品详情的数据
+export function getHomeGoodsData(type,page) {
+  return request({
+    url: '/home/data',
+    params: {
+      type,
+      page
+    }
+  })
+}
