@@ -1,6 +1,6 @@
 <template>
 <div>
-  <div class="wrapper">
+  <div class="wrapper" ref="aaa">
     <div class="content">
       <li>1</li>
       <li>2</li>
@@ -72,7 +72,7 @@ export default {
   mounted() {
     // console.log(BScroll);
     
-     this.scroll = new BScroll('.wrapper',{
+     this.scroll = new BScroll(this.$refs.aaa,{
         click:true,
         probeType:this.probeType,
         pullUpLoad:this.pullUpLoad
@@ -89,6 +89,6 @@ export default {
   height: 150px;
   background-color: red;
   /* overflow-y: scroll; */
-  /* overflow: hidden; */
+  overflow: hidden;
 }
 </style>

@@ -4,7 +4,14 @@
     <nav-bar class="home-nav">
       <div slot="center">购物街</div>
     </nav-bar>
-    <scroll class="content1" ref="scroll" >
+    <scroll
+      class="content1"
+      ref="scroll"
+      :probeType="3"
+      @scrollPosition="showPosition"
+      :pullUpLoad="true"
+        
+    >
       <!-- 轮播图 -->
       <home-swiper :banners="banners" style="width:100%;"></home-swiper>
       <!-- 推荐 -->
@@ -15,9 +22,8 @@
       <tab-control :title="tabTitle" class="tab" @tabClick="tabClick"></tab-control>
       <!-- 商品详情 -->
       <goods-list :goodsList="showGoods"></goods-list>
-
     </scroll>
-    <back-top @click.native="backClick" ></back-top>
+    <back-top @click.native="backClick" v-show="showToTop"></back-top>
 
     <!-- 返回顶部 -->
   </div>
@@ -52,7 +58,7 @@ export default {
       },
       //商品类型
       goodsType: "pop",
-      topNum:0
+      showToTop: false
     };
   },
   components: {
@@ -73,7 +79,15 @@ export default {
     this.getGoods("pop");
     this.getGoods("new");
     this.getGoods("sell");
+
+    this.$bus.$on('itemImgLoaded',()=>{
+      console.log(2);
+      this.$refs.scroll.refresh()
+      
+    })
+    
   },
+
   computed: {
     showGoods() {
       return this.goods[this.goodsType].list;
@@ -102,6 +116,7 @@ export default {
           // console.log(res.data.data);
           this.goods[type].list.push(...res.data.data.list);
           this.goods[type].page += 1;
+          this.$refs.scroll.finishPullUp();
         })
         .catch(err => {});
     },
@@ -123,17 +138,21 @@ export default {
           break;
       }
     },
-    backClick(){
-      // this.$refs.scroll.scrollTo(0,0,300);
-      // scrollTo(0,0)
-      // console.log(1);
-      // const scroll = document.querySelector('.content1')
-      // scroll.scrollTop=610;
-      // this.topNum=this.$refs.scroll.$refs.wrapper.scrollTop
-      // console.log(this.topNum);
-      // this.$refs.top.goTop()
+    backClick() {
+      this.$refs.scroll.scroll.scrollTo(0, 0, 500);
+      // console.log(this.$refs.scroll.scroll);
     },
-
+    showPosition(pos) {
+      if (pos.y < -1000) {
+        this.showToTop = true;
+      } else {
+        this.showToTop = false;
+      }
+    },
+    // loadMore() {
+    //   this.getGoods(this.goodsType);
+    //   this.$refs.scroll.refresh();
+    // }
   }
 };
 </script>
@@ -156,11 +175,14 @@ export default {
 }
 .tab {
   position: sticky;
+  position: -webkit-sticky;
+  position: -moz-sticky;
+  position: -ms-sticky;
+  /* position: -webkit-sticky; */
   top: 0px;
   /* z-index: 999; */
 }
 .content1 {
-
   margin-top: 44px;
   position: absolute;
   top: 0px;
