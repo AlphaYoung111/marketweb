@@ -50,6 +50,7 @@ export default {
   flex: 1;
   text-align: center;
   font-size: 14px;
+  /* z-index: 999; */
 }
 .tab-bar-item img {
   width: 24px;

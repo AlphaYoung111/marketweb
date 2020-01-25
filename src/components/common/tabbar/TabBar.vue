@@ -13,7 +13,7 @@ export default {
   display: flex;
   background-color: #f6f6f6;
   height: 49px;
-
+  /* z-index: 999; */
   position: fixed;
   left: 0;
   bottom: 0;

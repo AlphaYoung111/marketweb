@@ -1,5 +1,5 @@
 <template>
-<div>
+<div class="container">
    <tab-bar>
       <tab-bar-item link="/home" >
         <img slot="item-img" src="@assets/img/tabbarIcon/home.png" alt />
@@ -25,7 +25,7 @@
         <div slot="item-title">个人中心</div>
       </tab-bar-item>
     </tab-bar>
-    <router-view></router-view>
+    <!-- <router-view></router-view> -->
     </div>
 </template>
 <script>
@@ -38,3 +38,8 @@ export default {
   }
 }
 </script>
+<style>
+.container{
+  z-index: 100;
+}
+</style>

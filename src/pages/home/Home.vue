@@ -4,66 +4,22 @@
     <nav-bar class="home-nav">
       <div slot="center">购物街</div>
     </nav-bar>
-    <!-- 轮播图 -->
-    <home-swiper :banners="banners"></home-swiper>
-    <!-- 推荐 -->
-    <recommend-view :recommends="recommends"></recommend-view>
-    <!-- 热门 -->
-    <feature-view></feature-view>
-    <!-- 首页选项卡 -->
-    <tab-control :title="tabTitle" class="tab"></tab-control>
-    <ul>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-    </ul>
+    <scroll class="content1" ref="scroll" >
+      <!-- 轮播图 -->
+      <home-swiper :banners="banners" style="width:100%;"></home-swiper>
+      <!-- 推荐 -->
+      <recommend-view :recommends="recommends" style="height:auto;"></recommend-view>
+      <!-- 热门 -->
+      <feature-view></feature-view>
+      <!-- 首页选项卡 -->
+      <tab-control :title="tabTitle" class="tab" @tabClick="tabClick"></tab-control>
+      <!-- 商品详情 -->
+      <goods-list :goodsList="showGoods"></goods-list>
+
+    </scroll>
+    <back-top @click.native="backClick" ></back-top>
+
+    <!-- 返回顶部 -->
   </div>
 </template>
 <script>
@@ -73,6 +29,9 @@ import FeatureView from "./childComps/FeatureView";
 
 import NavBar from "@components/common/navbar/NavBar";
 import TabControl from "@components/content/tabcontrol/TabControl";
+import GoodsList from "@components/content/goods/GoodsList";
+import Scroll from "@components/common/scroll/Scroll";
+import BackTop from "@components/content/backtop/BackTop";
 
 import { getHomeMultiData, getHomeGoodsData } from "@network/home";
 export default {
@@ -90,7 +49,10 @@ export default {
         pop: { page: 0, list: [] },
         new: { page: 0, list: [] },
         sell: { page: 0, list: [] }
-      }
+      },
+      //商品类型
+      goodsType: "pop",
+      topNum:0
     };
   },
   components: {
@@ -99,17 +61,29 @@ export default {
     FeatureView,
 
     NavBar,
-    TabControl
+    TabControl,
+    GoodsList,
+    Scroll,
+    BackTop
   },
   created() {
     // 轮播，分类
     this.getMulti();
     //商品
-    this.getGoods('pop');
-    this.getGoods('new');
-    this.getGoods('sell');
+    this.getGoods("pop");
+    this.getGoods("new");
+    this.getGoods("sell");
   },
+  computed: {
+    showGoods() {
+      return this.goods[this.goodsType].list;
+    }
+  },
+
   methods: {
+    /*
+    网络请求相关方法
+    */
     // 轮播，分类
     getMulti() {
       getHomeMultiData()
@@ -122,21 +96,53 @@ export default {
     },
     //商品
     getGoods(type) {
-      const page =this.goods[type].page+1;
+      const page = this.goods[type].page + 1;
       getHomeGoodsData(type, page)
         .then(res => {
-          console.log(res.data.data);
+          // console.log(res.data.data);
           this.goods[type].list.push(...res.data.data.list);
-          this.goods[type].page+=1;
+          this.goods[type].page += 1;
         })
         .catch(err => {});
-    }
+    },
+
+    /*
+    事件监听相关方法
+    */
+    //选项卡切换数据内容
+    tabClick(index) {
+      switch (index) {
+        case 0:
+          this.goodsType = "pop";
+          break;
+        case 1:
+          this.goodsType = "new";
+          break;
+        case 2:
+          this.goodsType = "sell";
+          break;
+      }
+    },
+    backClick(){
+      // this.$refs.scroll.scrollTo(0,0,300);
+      // scrollTo(0,0)
+      // console.log(1);
+      // const scroll = document.querySelector('.content1')
+      // scroll.scrollTop=610;
+      // this.topNum=this.$refs.scroll.$refs.wrapper.scrollTop
+      // console.log(this.topNum);
+      // this.$refs.top.goTop()
+    },
+
   }
 };
 </script>
 <style scoped>
 #home {
-  padding-top: 44px;
+  /* padding-top: 44px; */
+  /* margin-top: 44px; */
+  position: relative;
+  height: 100vh;
 }
 .home-nav {
   background-color: var(--color-tint);
@@ -146,9 +152,21 @@ export default {
   right: 0;
   top: 0;
   z-index: 9;
+  /* margin-bottom: 44px; */
 }
 .tab {
   position: sticky;
-  top: 44px;
+  top: 0px;
+  /* z-index: 999; */
+}
+.content1 {
+
+  margin-top: 44px;
+  position: absolute;
+  top: 0px;
+  bottom: 50px;
+  left: 0;
+  right: 0;
+  overflow: auto;
 }
 </style>

@@ -21,6 +21,7 @@ export default {
   methods: {
     indexChange(index) {
       this.currentIndex = index;
+      this.$emit('tabClick',index)
     }
   },
   props: {
@@ -41,6 +42,8 @@ export default {
   line-height: 40px;
   height: 40px;
   background-color: #fff;
+  margin-bottom: 5px;
+  z-index: 9;
 }
 .tab-control-item {
   flex: 1;
