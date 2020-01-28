@@ -1,16 +1,18 @@
 <template>
-  <div class="goods-item">
-   <div class="item-place">
-      <img :src="goodsItem.show.img" alt class="item-place-img" @load="imgLoad" />
-    <div>
-      <p class="goods-item-title">{{goodsItem.title}}</p>
-      <div class="price">{{'￥'+goodsItem.price}}</div>
-      <div class="collect">
-        <span class="star"><img src="@assets/img/common/collect.svg" alt=""></span>
-        <span class="cfav">{{goodsItem.cfav}}</span>
+  <div class="goods-item" @click="itemClick">
+    <div class="item-place">
+      <img :src="showImgs" alt class="item-place-img" @load="imgLoad" />
+      <div>
+        <p class="goods-item-title">{{goodsItem.title}}</p>
+        <div class="price">{{'￥'+goodsItem.price}}</div>
+        <div class="collect">
+          <span class="star">
+            <img src="@assets/img/common/collect.svg" alt />
+          </span>
+          <span class="cfav">{{goodsItem.cfav}}</span>
+        </div>
       </div>
     </div>
-   </div>
   </div>
 </template>
 <script>
@@ -24,20 +26,29 @@ export default {
       }
     }
   },
-  methods:{
-    imgLoad(){
-      this.$bus.$emit('itemImgLoaded')
-      
+  methods: {
+    imgLoad() {
+      this.$bus.$emit("itemImgLoaded");
+    },
+    itemClick() {
+      // console.log(1);
+      this.$router.push("/detail/" + this.goodsItem.iid);
+    }
+  },
+  computed: {
+    showImgs() {
+      return this.goodsItem.image || this.goodsItem.show.img
+      // return this.goodsItem.show.img || this.goodsItem.image;
     }
   }
 };
 </script>
 <style scoped>
-.item-place-img{
+.item-place-img {
   width: 100%;
   height: 250px;
 }
-.goods-item{
+.goods-item {
   /* float: left; */
   font-size: 12px;
   width: 47%;
@@ -47,10 +58,9 @@ export default {
   position: relative;
   /* z-index: 1; */
 }
-.item-place{
+.item-place {
   width: 100%;
   /* padding-left: 5px; */
-
 }
 .goods-item-title {
   overflow: hidden;
@@ -59,32 +69,30 @@ export default {
   padding: 4px;
 }
 
-.price{
+.price {
   color: var(--color-high-text);
- position: absolute;
- left:25%;
- top: 91.5%;
+  position: absolute;
+  left: 25%;
+  top: 91.5%;
 }
-.collect{
+.collect {
   position: relative;
   display: flex;
-
 }
-.cfav{
+.cfav {
   position: absolute;
   left: 63%;
-  top:-1px ;
+  top: -1px;
 }
-.star{
+.star {
   width: 14px;
   height: 14px;
   display: block;
-   position: absolute;
-  left:55%;
-  top:-2px ;
- 
+  position: absolute;
+  left: 55%;
+  top: -2px;
 }
-.star img{
+.star img {
   width: 100%;
   height: 100%;
 }

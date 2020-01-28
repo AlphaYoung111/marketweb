@@ -34,24 +34,26 @@ export default {
       probeType: this.probeType,
       pullUpLoad: this.pullUpLoad
     });
-    this.scroll.scrollTo(0, 0);
+    // this.scroll.scrollTo(0, 0);
     this.scroll.on("scroll", position => {
       this.$emit("scrollPosition", position);
       // console.log(position);
     });
-    // this.scroll.on("pullingUp", () => {
-    //   this.$emit("pullingUpEvent");
-    // });
+    this.scroll.on('pullingUp',()=>{
+      this.$emit('pullingUp')
+    })
   },
   methods: {
     refresh() {
       this.scroll && this.scroll.refresh();
+      // console.log(1);
+      
     },
     scrollTo(x, y, time = 300) {
-      this.scroll.scrollTo(x, y, time);
+      this.scroll && this.scroll.scrollTo(x, y, time);
     },
     finishPullUp() {
-      this.scroll.finishPullUp();
+      this.scroll && this.scroll.finishPullUp();
     }
   }
 };

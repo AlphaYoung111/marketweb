@@ -1,29 +1,28 @@
 <template>
   <div class="goods">
     <!-- <goods-list-item></goods-list-item> -->
-    <goods-list-item v-for="(item,index) in goodsList" :key="index" :goodsItem="item">
-    </goods-list-item>
+    <goods-list-item v-for="(item,index) in goodsList" :key="index" :goodsItem="item"></goods-list-item>
   </div>
 </template>
 <script>
-import GoodsListItem from './GoodsListItem';
+import GoodsListItem from "./GoodsListItem";
 export default {
-  name:'GoodsList',
-  components:{
-GoodsListItem
+  name: "GoodsList",
+  components: {
+    GoodsListItem
   },
-  props:{
-    goodsList:{
-      type:Array,
-      default(){
-        return []
+  props: {
+    goodsList: {
+      type: Array,
+      default() {
+        return [];
       }
     }
   }
-}
+};
 </script>
 <style scoped>
-.goods{
+.goods {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-around;
