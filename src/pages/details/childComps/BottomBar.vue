@@ -22,7 +22,12 @@
 </template>
 <script>
 export default {
-  name:'BottomBar'
+  name:'BottomBar',
+  methods:{
+    addToCart(){
+      this.$emit('addCar')
+    }
+  }
 }
 </script>
 <style scoped>

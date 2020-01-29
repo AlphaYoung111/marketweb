@@ -21,7 +21,7 @@
     </scroll>
     <back-top @click.native="backClick" v-show="showToTop"></back-top>
     <!-- 底部购物车 -->
-    <bottom-bar></bottom-bar>
+    <bottom-bar @addCar="addToCar"></bottom-bar>
   </div>
 </template>
 <script>
@@ -47,6 +47,7 @@ import {
   GoodsParam,
   getRecommendData
 } from "@network/detail";
+
 export default {
   name: "Detail",
   data() {
@@ -156,22 +157,46 @@ export default {
       refresh();
       // console.log(this.$refs.nav);
     },
+    //选项卡点击
     titleClick(index) {
       // console.log(index);
       this.$refs.scroll.scrollTo(0, -this.navTopY[index], 300);
     },
+    //滚动监听
     detailScroll(position) {
       let length = this.navTopY.length;
       let posy = -position.y;
       for (let i = 0; i < length - 1; i++) {
         if (
           this.$refs.nav.currentIndex !== i &&
-          posy >= this.navTopY[i] && posy < this.navTopY[i + 1]
+          posy >= this.navTopY[i] &&
+          posy < this.navTopY[i + 1]
         ) {
           this.$refs.nav.currentIndex = i;
         }
       }
       this.showToTop = posy > 1000;
+    },
+    //添加购物车
+    addToCar() {
+      const product = {};
+      product.iid = this.iid;
+      product.imgURL = this.banner[0];
+      product.title = this.goods.title;
+      product.desc = this.goods.desc;
+      product.newPrice = this.goods.nowPrice;
+      product.count = 0;
+      product.isCheck = true;
+      // console.log(product);
+      // this.$store.commit('addCar',product)
+
+      this.$store.dispatch("addCar", product).then(res => {
+        // console.log(res);
+      //  this.$toast.show(res,1500);
+       this.$toast.show(res)
+      // console.log(this.$toast);
+      
+      });
     }
   }
 };
